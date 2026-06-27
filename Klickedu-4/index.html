@@ -1650,7 +1650,7 @@
     </div>
 </div>
 <!-- Fixed bottom Free Registration button (visible after home section) -->
-<div id="fixedRegBtn" class="fixed bottom-0 left-0 right-0 z-[250] transition-all duration-500 opacity-0 translate-y-full pointer-events-none px-0 sm:px-4 sm:bottom-5 sm:left-1/2 sm:right-auto sm:w-auto sm:-translate-x-1/2">
+<div id="fixedRegBtn" class="fixed bottom-0 left-0 right-0 z-[250] px-0 sm:px-4 sm:bottom-5 sm:left-1/2 sm:right-auto sm:w-auto sm:-translate-x-1/2">
     <a href="#contact"
         class="flex items-center justify-center gap-3 bg-brandPrimary hover:bg-brandDark text-white w-full sm:w-auto sm:rounded-full px-8 py-4 font-bold text-sm shadow-2xl shadow-purple-900/40 transition-colors">
         <span class="flex items-center gap-2">
@@ -1666,31 +1666,16 @@
 
 <script>
     (function () {
-        const btn      = document.getElementById('fixedRegBtn');
-        const homeSec  = document.getElementById('home');
-        const display  = document.getElementById('fixedCountdown');
-        if (!btn || !homeSec) return;
-
-        // Scroll show/hide
-        function update() {
-            if (homeSec.getBoundingClientRect().bottom < 0) {
-                btn.classList.remove('opacity-0', 'translate-y-full', 'pointer-events-none');
-                btn.classList.add('opacity-100', 'translate-y-0');
-            } else {
-                btn.classList.add('opacity-0', 'translate-y-full', 'pointer-events-none');
-                btn.classList.remove('opacity-100', 'translate-y-0');
-            }
-        }
-        window.addEventListener('scroll', update, { passive: true });
-        update();
-
-        // Shared 10-minute countdown — persists across refreshes for first 5 page loads
+        const display = document.getElementById('fixedCountdown');
         const benefitsDisplay = document.getElementById('benefitsCountdown');
+        
+        // Shared 10-minute countdown — persists across refreshes for first 5 page loads
         const storedEnd   = parseInt(localStorage.getItem('regTimerEnd')   || '0');
         const storedCount = parseInt(localStorage.getItem('regTimerCount') || '0');
         const nowMs       = Date.now();
         const newCount    = storedCount + 1;
         let endTime;
+        
         if (storedEnd > nowMs && newCount <= 5) {
             // Timer still running and within 5 refreshes — continue from stored time
             endTime = storedEnd;
@@ -1709,6 +1694,7 @@
             const formatted = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
             if (display)         display.textContent         = formatted;
             if (benefitsDisplay) benefitsDisplay.textContent = formatted;
+            
             if (remaining === 0) {
                 // Reset after expiry
                 endTime = Date.now() + 10 * 60 * 1000;
@@ -1716,6 +1702,7 @@
                 localStorage.setItem('regTimerCount', '0');
             }
         }
+        
         tick();
         setInterval(tick, 1000);
     })();

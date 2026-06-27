@@ -343,7 +343,6 @@
                             <img src="../assets/tamilnaduremovebg.png" alt="Map of Tamil Nadu" class="w-full h-full object-contain opacity-80" />
                         </div>
 
-                        <!-- Fixed info card – top-left of map -->
                         <div id="mapInfoCard" class="absolute top-3 left-3 z-20 bg-white/90 backdrop-blur-sm rounded-xl border border-gray-100 shadow-lg px-3 py-2.5 pointer-events-none min-w-[100px]">
                             <p id="infoCity" class="text-xs font-extrabold text-brandDark leading-tight"></p>
                             <p id="infoDate" class="text-[11px] font-bold text-brandPrimary leading-tight mt-0.5"></p>
@@ -943,7 +942,7 @@
                 <div>
                     <p class="text-xs font-extrabold text-red-600 uppercase tracking-widest leading-tight">Limited passes available for each city</p>
                     <p class="text-[11px] text-red-500 font-semibold mt-0.5">
-                        Offer expires in&nbsp;<span id="benefitsCountdown" class="font-extrabold">10:00</span>
+                        Offer expires in <span id="benefitsCountdown" class="font-extrabold">10:00</span>
                     </p>
                 </div>
             </div>
@@ -955,7 +954,6 @@
 </section>
     
 
-    <!-- Lightbox -->
     <div id="lightbox" class="hidden fixed inset-0 z-[400] items-center justify-center p-4">
         <div id="lightboxBackdrop" class="absolute inset-0 bg-black/85 backdrop-blur-sm"></div>
         <button id="lightboxClose" class="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center bg-white/20 hover:bg-white/40 text-white rounded-full transition-colors">
@@ -1216,7 +1214,7 @@
 
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
-            if (window.scrollY > 50) {
+            if (window.scrollY > 0) {
                 nav.classList.add('bg-white/90', 'backdrop-blur-md', 'border-gray-100', 'shadow-sm');
                 nav.classList.remove('border-transparent');
             } else {
@@ -1647,8 +1645,7 @@
         </form>
     </div>
 </div>
-<!-- Fixed bottom Free Registration button (visible after home section) -->
-<div id="fixedRegBtn" class="fixed bottom-0 left-0 right-0 z-[250] transition-all duration-500 opacity-0 translate-y-full pointer-events-none px-0 sm:px-4 sm:bottom-5 sm:left-1/2 sm:right-auto sm:w-auto sm:-translate-x-1/2">
+<div id="fixedRegBtn" class="fixed bottom-0 left-0 right-0 z-[250] px-0 sm:px-4 sm:bottom-5 sm:left-1/2 sm:right-auto sm:w-auto sm:-translate-x-1/2">
     <a href="#contact"
         class="flex items-center justify-center gap-3 bg-brandPrimary hover:bg-brandDark text-white w-full sm:w-auto sm:rounded-full px-8 py-4 font-bold text-sm shadow-2xl shadow-purple-900/40 transition-colors">
         <span class="flex items-center gap-2">
@@ -1664,31 +1661,16 @@
 
 <script>
     (function () {
-        const btn      = document.getElementById('fixedRegBtn');
-        const homeSec  = document.getElementById('home');
-        const display  = document.getElementById('fixedCountdown');
-        if (!btn || !homeSec) return;
-
-        // Scroll show/hide
-        function update() {
-            if (homeSec.getBoundingClientRect().bottom < 0) {
-                btn.classList.remove('opacity-0', 'translate-y-full', 'pointer-events-none');
-                btn.classList.add('opacity-100', 'translate-y-0');
-            } else {
-                btn.classList.add('opacity-0', 'translate-y-full', 'pointer-events-none');
-                btn.classList.remove('opacity-100', 'translate-y-0');
-            }
-        }
-        window.addEventListener('scroll', update, { passive: true });
-        update();
-
-        // Shared 10-minute countdown — persists across refreshes for first 5 page loads
+        const display = document.getElementById('fixedCountdown');
         const benefitsDisplay = document.getElementById('benefitsCountdown');
+        
+        // Shared 10-minute countdown — persists across refreshes for first 5 page loads
         const storedEnd   = parseInt(localStorage.getItem('regTimerEnd')   || '0');
         const storedCount = parseInt(localStorage.getItem('regTimerCount') || '0');
         const nowMs       = Date.now();
         const newCount    = storedCount + 1;
         let endTime;
+        
         if (storedEnd > nowMs && newCount <= 5) {
             // Timer still running and within 5 refreshes — continue from stored time
             endTime = storedEnd;
@@ -1707,6 +1689,7 @@
             const formatted = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
             if (display)         display.textContent         = formatted;
             if (benefitsDisplay) benefitsDisplay.textContent = formatted;
+            
             if (remaining === 0) {
                 // Reset after expiry
                 endTime = Date.now() + 10 * 60 * 1000;
@@ -1714,6 +1697,7 @@
                 localStorage.setItem('regTimerCount', '0');
             }
         }
+        
         tick();
         setInterval(tick, 1000);
     })();
